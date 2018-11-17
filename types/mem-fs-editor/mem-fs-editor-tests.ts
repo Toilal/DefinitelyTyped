@@ -7,6 +7,7 @@ const store = memFs.create();
 const fs = editor.create(store);
 
 fs.write('template.js', 'var a = 1; console.log(\'<%= foo %>\', a);');
+fs.append('template.js', 'var b = 2;');
 
 fs.copy('template.js', 'template.tpl', {
     process: (contents) => contents,
@@ -21,7 +22,6 @@ fs.copyTpl('template.tpl', 'output.js', {
 
 const obj = fs.readJSON('template.json');
 fs.writeJSON('template.json', obj);
-fs.extendJSON('template.json', {qwer: 'asdf'});
 
 fs.writeJSON('template.json', 'qwer'); // should not be an error, because the parameter is passed to JSON.stringify and it accepts the string
 // fs.extendJSON('template.json', 'qwer'); // should be an error, because it does not make sense to extend a json with string
