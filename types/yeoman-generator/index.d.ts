@@ -9,6 +9,7 @@
 
 import { EventEmitter } from 'events';
 import * as inquirer from 'inquirer';
+import { Editor } from 'mem-fs-editor';
 
 type Callback = (err: any) => void;
 
@@ -22,16 +23,6 @@ declare namespace Generator {
     type Questions = Question | Question[] | Rx.Observable<Question>;
     type Answers = inquirer.Answers;
 
-    class Storage {
-        constructor(name: string, fs: MemFsEditor, configPath: string);
-
-        defaults(defaults: {}): {};
-        delete(key: string): void;
-        get(key: string): any;
-        getAll(): { [key: string]: any };
-        save(): void;
-        set(key: string, value: any): any;
-    }
     interface InstallOptions {
         /**
          * whether to run `npm install` or can be options to pass to `dargs` as arguments
@@ -50,6 +41,7 @@ declare namespace Generator {
          */
         skipMessage?: boolean;
     }
+
     interface ArgumentConfig {
         description?: string;
         required?: boolean;
@@ -57,6 +49,7 @@ declare namespace Generator {
         type?: typeof String|typeof Number|typeof Array|typeof Object;
         default?: any;
     }
+
     interface OptionConfig {
         alias?: string;
         default?: any;
@@ -64,19 +57,18 @@ declare namespace Generator {
         hide?: boolean;
         type?: typeof Boolean|typeof String|typeof Number;
     }
-    interface MemFsEditor {
-        read(filepath: string, options?: {}): string;
-        readJSON(filepath: string, defaults?: {}): any;
-        write(filepath: string, contents: string): void;
-        writeJSON(filepath: string, contents: {}, replacer?: (key: string, value: any) => any, space?: number): void;
-        extendJSON(filepath: string, contents: {}, replacer?: (key: string, value: any) => any, space?: number): void;
-        delete(filepath: string, options?: {}): void;
-        copy(from: string, to: string, options?: {}): void;
-        copyTpl(from: string, to: string, context: {}, templateOptions?: {}, copyOptions?: {}): void;
-        move(from: string, to: string, options?: {}): void;
-        exists(filepath: string): boolean;
-        commit(callback: Callback): void;
-        commit(filters: any[], callback: Callback): void;
+
+    type MemFsEditor = Editor;
+
+    class Storage {
+        constructor(name: string, fs: MemFsEditor, configPath: string);
+
+        defaults(defaults: {}): {};
+        delete(key: string): void;
+        get(key: string): any;
+        getAll(): { [key: string]: any };
+        save(): void;
+        set(key: string, value: any): any;
     }
 }
 
